@@ -27,11 +27,11 @@ def replaceTokens (dummy):
     global renpath
     global nodeDict
     tokens = {
-    "$Scene":bpy.context.scene.name,
-    "$File":os.path.basename(bpy.data.filepath).split(".")[0],
-    "$ViewLayer":bpy.context.view_layer.name,
-    "$Camera": "NoCamera" if bpy.context.scene.camera == None else bpy.context.scene.camera.name,
-    "$Object" : bpy.context.view_layer.objects.active.name}
+    "<scene>":bpy.context.scene.name,
+    "<file>":os.path.basename(bpy.data.filepath).split(".")[0],
+    "<viewlayer>":bpy.context.view_layer.name,
+    "<camera>": "NoCamera" if bpy.context.scene.camera == None else bpy.context.scene.camera.name,
+    "<version>" : bpy.context.view_layer.objects.active.name}
     
     print(bpy.context.view_layer.objects.active.name)
 
@@ -43,11 +43,11 @@ def replaceTokens (dummy):
         for node in bpy.context.scene.node_tree.nodes:
             if node.type == "OUTPUT_FILE":
                 nodeDict.append([node,node.base_path])
-                node.base_path = node.base_path.replace("$Scene",tokens["$Scene"]).replace("$File",tokens["$File"]).replace("$ViewLayer",tokens["$ViewLayer"]).replace("$Camera",tokens["$Camera"]).replace("$Object",tokens["$Object"])
+                node.base_path = node.base_path.replace("<scene>",tokens["<scene>"]).replace("<file>",tokens["<file>"]).replace("<viewlayer>",tokens["<viewlayer>"]).replace("<camera>",tokens["<camera>"]).replace("<version>",tokens["<version>"])
 
 
 
-    bpy.context.scene.render.filepath = renpath.replace("$Scene",tokens["$Scene"]).replace("$File",tokens["$File"]).replace("$ViewLayer",tokens["$ViewLayer"]).replace("$Camera",tokens["$Camera"]).replace("$Object",tokens["$Object"])
+    bpy.context.scene.render.filepath = renpath.replace("<scene>",tokens["<scene>"]).replace("<file>",tokens["<file>"]).replace("<viewlayer>",tokens["<viewlayer>"]).replace("<camera>",tokens["<camera>"]).replace("<version>",tokens["<version>"])
     print(bpy.context.scene.render.filepath)
 
 
@@ -61,4 +61,4 @@ def restoreTokens (dummy):
         node[0].base_path = node[1]
 
 
-# //RENDER/$Scene/$File/$ViewLayer/$Camera
+# //RENDER/<scene>/<file>/<viewlayer>/<camera>
